@@ -1,0 +1,88 @@
+# System and temporary files
+*~
+*.swp
+*.swo
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Local configuration files
+config.sh
+.env
+.env.local
+secrets.sh
+credentials.sh
+
+# Logs
+*.log
+logs/
+*.out
+
+# Backup files
+*.bak
+*.backup
+backup/
+*.old
+
+# VSCode files
+.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Editor files
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Hidden system files
+.hidden
+.cache/
+
+# Sensitive data
+passwords.txt
+api_keys.txt
+tokens.txt
+private/
+
+# Test files
+test_output/
+*.test
+test_*.sh
+
+# Dependencies and packages
+node_modules/
+vendor/
+
+# Archives
+*.tar
+*.tar.gz
+*.zip
+*.rar
+*.7z
+
+# Compiled binary files (if using C/C++ scripts)
+*.o
+*.so
+*.exe
+*.out
+a.out
+
+# Temporary data files
+data/temp/
+temp/
+tmp/
+
+# Output files
+output/
+results/
+
+# PID files
+*.pid
+
+# Specific local files
+local.sh
+dev.sh
