@@ -1,46 +1,50 @@
 #!/bin/bash
 
-# A Simple bash script to move up to desired directory level directory
+# A simple bash script to move up to a desired directory level
 
-function jump()
-{
+function jump() {
 
-    # Original value of Internal Field Separator
-    OLDIFS=$IFS
+    # Vérifie qu'un argument a été passé
+    if [[ -z "$1" ]]; then
+        echo "Usage: jump <directory_name>" >&2
+        return 1
+    fi
 
-    # Setting field separator to "/"
+    # Sauvegarde et redéfinit IFS pour splitter sur "/"
+    local OLDIFS="$IFS"
     IFS=/
 
-    # Converting working path into array of directories in path
-    # eg. /my/path/is/like/this
-    # into [, my, path, is, like, this]
-    path_arr=($PWD)
+    # Convertit le chemin courant en tableau
+    # ex: /my/path/is/like/this -> ["", "my", "path", "is", "like", "this"]
+    local path_arr=($PWD)
 
-    # Setting IFS to original value
-    IFS=$OLDIFS
+    # Restaure IFS proprement
+    IFS="$OLDIFS"
 
     local pos=-1
+    local found=0
 
-    # ${path_array[@]} gives all the values in path_arr
-    for dir in "${path_array[@]}"
-    do 
-        # find the number of directories to move up to
-        # reach at target directory
-        pos=$ [$pos+1]
-        if [ "$1" = "$dir"]; then
-            # length of the path_arr
-            dir_in_path=${#path_arr[@]}
+    # Itère sur path_arr (nom cohérent)
+    for dir in "${path_arr[@]}"; do
+        pos=$(( pos + 1 ))            # Fix: syntaxe arithmétique correcte
+        if [[ "$1" == "$dir" ]]; then # Fix: espace avant ]]
+            found=1
+            local dir_in_path=${#path_arr[@]}
+            local cwd="$PWD"
+            local limit=$(( dir_in_path - pos - 1 ))  # Fix: syntaxe arithmétique
 
-            # current working directory
-            cwd=$PWD
-            limit=$ [$dir_in_path-$pos-1]
-            for((i=0; i<limit; i++))
-            do
-                cwd=$cwd/..
+            for (( i = 0; i < limit; i++ )); do
+                cwd="$cwd/.."
             done
-            cd $cwd
+
+            cd -P "$cwd"  # -P résout les symlinks et nettoie les ".."
             break
         fi
     done
 
+    # Fix: message d'erreur si cible introuvable
+    if [[ $found -eq 0 ]]; then
+        echo "jump: '$1' not found in current path" >&2
+        return 1
+    fi
 }
